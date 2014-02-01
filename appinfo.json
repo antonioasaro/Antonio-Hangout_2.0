@@ -16,6 +16,11 @@
         "media": [
             {
                 "type": "png",
+                "name": "IMAGE_MENU_ICON",
+                "file": "images/menu_icon.png"
+            },
+            {
+                "type": "png",
                 "name": "IMAGE_DISCONNECT",
                 "file": "images/disconnect.png"
             },
@@ -43,12 +48,6 @@
                 "type": "png",
                 "name": "IMAGE_BATTERY_CHARGE",
                 "file": "images/battery-charge.png"
-            },
-            {
-                "menuIcon": true,
-                "type": "png",
-                "name": "IMAGE_MENU_ICON",
-                "file": "images/menu_icon_simplicity.png"
             },
             {
                 "type": "font",
