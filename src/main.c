@@ -139,22 +139,28 @@ void update_time(struct tm *tick_time) {
 #ifdef HANGOUT
     static int word_idx;
 	static int word_len;
-	static int ltr_mask;
+	static int lttr_msk;
+	static int cmpl_msk;
 	static char word_text[16];
 	static char ulne_text[16];
     static char underline[] = "- - - - - - - - - - - - - - - -";
 	if (new_word) {
-//		ltr_mask = 0;
+		lttr_msk = 0;
+
 		word_idx = rand() % WL_LEN;
-		word_len = strlen(wlst[word_idx]);
 		strcpy(word_text, wlst[word_idx]);
+		word_len = strlen(wlst[word_idx]);
+		cmpl_msk = (1 << word_len) - 1;
 
 		strncpy(ulne_text, underline, word_len*2-1); 
 		ulne_text[word_len*2] = '\0';
-		
 		new_word = false;
 	} else {
-		strcpy(word_text, "         ");
+		if (lttr_msk == cmpl_msk) {
+			new_word = true;
+		} else {
+			lttr_msk = lttr_msk + 1;
+		}
 	}
     text_layer_set_text(layer_word_text, word_text);
     text_layer_set_text(layer_ulne_text, ulne_text);
@@ -242,13 +248,13 @@ void handle_init(void) {
     layer_conn_img  = bitmap_layer_create(GRect(118, 12, 20, 20));
 
 #ifdef HANGOUT
-	layer_word_text = text_layer_create(GRect(7, 125, 144-7, 40));
+	layer_word_text = text_layer_create(GRect(7, 130, 144-7, 40));
     text_layer_set_text_color(layer_word_text, GColorWhite);
 	text_layer_set_background_color(layer_word_text, GColorBlack);
     text_layer_set_font(layer_word_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_18)));
     text_layer_set_text_alignment(layer_word_text, GTextAlignmentCenter);
 
-	layer_ulne_text = text_layer_create(GRect(7, 145, 144-7, 40));
+	layer_ulne_text = text_layer_create(GRect(7, 150, 144-7, 40));
     text_layer_set_text_color(layer_ulne_text, GColorWhite);
     text_layer_set_background_color(layer_ulne_text, GColorBlack);
     text_layer_set_font(layer_ulne_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_18)));
