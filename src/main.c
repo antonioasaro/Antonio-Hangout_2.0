@@ -113,6 +113,12 @@ void update_time(struct tm *tick_time) {
     }
 
     text_layer_set_text(layer_time_text, time_text);
+	
+#ifdef HANGOUT
+//    text_layer_set_text(layer_word_text, "t e s t i n g");
+//    text_layer_set_text(layer_ulne_text, "- - - - - - -");
+#endif
+	
 }
 
 void set_style(void) {
@@ -188,12 +194,12 @@ void handle_init(void) {
     layer_line      = layer_create(GRect(8, 97, 128, 2));
 
 #ifdef HANGOUT
-	layer_word_text = text_layer_create(GRect(8, 110, 144-8, 168-68));
+	layer_word_text = text_layer_create(GRect(8, 47, 144-8, 168-68));
 	text_layer_set_background_color(layer_word_text, GColorClear);
 	text_layer_set_font(layer_word_text, FONT_KEY_GOTHIC_18);
     text_layer_set_text_alignment(layer_word_text, GTextAlignmentCenter);
 
-	layer_ulne_text = text_layer_create(GRect(8, 120, 144-8, 168-68));
+	layer_ulne_text = text_layer_create(GRect(8, 47, 144-8, 168-68));
     text_layer_set_background_color(layer_ulne_text, GColorClear);
     text_layer_set_font(layer_ulne_text, FONT_KEY_GOTHIC_18);
     text_layer_set_text_alignment(layer_ulne_text, GTextAlignmentCenter);
@@ -231,6 +237,11 @@ void handle_init(void) {
 #ifdef HANGOUT
     layer_add_child(window_layer, text_layer_get_layer(layer_word_text));
     layer_add_child(window_layer, text_layer_get_layer(layer_ulne_text));
+	
+    static char word_text[] = "t e s t i n g";
+    static char ulne_text[] = "- - - - - - -";
+    text_layer_set_text(layer_word_text, word_text);
+    text_layer_set_text(layer_ulne_text, ulne_text);
 #endif
 
     // style
