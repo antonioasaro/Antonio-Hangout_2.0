@@ -57,7 +57,7 @@
             {
                 "characterRegex": "[:0-9]",
                 "type": "font",
-                "name": "FONT_ROBOTO_BOLD_SUBSET_40",
+                "name": "FONT_ROBOTO_BOLD_SUBSET_44",
                 "file": "fonts/Roboto-Bold.ttf"
             }
         ]

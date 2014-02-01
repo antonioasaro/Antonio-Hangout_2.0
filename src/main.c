@@ -139,16 +139,20 @@ void update_time(struct tm *tick_time) {
 #ifdef HANGOUT
     static int word_idx;
 	static int word_len;
+	static int ltr_mask;
 	static char word_text[16];
 	static char ulne_text[16];
     static char underline[] = "- - - - - - - - - - - - - - - -";
 	if (new_word) {
+//		ltr_mask = 0;
 		word_idx = rand() % WL_LEN;
+		word_len = strlen(wlst[word_idx]);
 		strcpy(word_text, wlst[word_idx]);
 
-		word_len = strlen(wlst[word_idx]);
 		strncpy(ulne_text, underline, word_len*2-1); 
 		ulne_text[word_len*2] = '\0';
+		
+		new_word = false;
 	} else {
 		strcpy(word_text, "         ");
 	}
@@ -224,7 +228,7 @@ void handle_init(void) {
     // layers
 #ifdef HANGOUT
     layer_date_text = text_layer_create(GRect(8, 48, 144-8, 40));
-    layer_time_text = text_layer_create(GRect(7, 72, 144-7, 40));
+    layer_time_text = text_layer_create(GRect(7, 72, 144-7, 50));
     layer_line      = layer_create(GRect(8, 74, 128, 2));
 #else
     layer_date_text = text_layer_create(GRect(8, 68, 144-8, 168-68));
@@ -258,7 +262,7 @@ void handle_init(void) {
     text_layer_set_font(layer_date_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_18)));
 
     text_layer_set_background_color(layer_time_text, GColorClear);
-    text_layer_set_font(layer_time_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_BOLD_SUBSET_40)));
+    text_layer_set_font(layer_time_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_BOLD_SUBSET_44)));
 
     text_layer_set_background_color(layer_batt_text, GColorClear);
     text_layer_set_font(layer_batt_text, fonts_get_system_font(FONT_KEY_FONT_FALLBACK));
