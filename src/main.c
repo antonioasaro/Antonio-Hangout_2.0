@@ -81,8 +81,15 @@ void line_layer_update_callback(Layer *layer, GContext* ctx) {
 void update_time(struct tm *tick_time) {
     // Need to be static because they're used by the system later.
     static char time_text[] = "00:00";
+#ifdef HANGOUT
+    static char wdat_text[] = "00";
+    static char wday_text[] = "Xxx";
+    static char mnth_text[] = "Xxx";
+    static char date_text[] = "Xxx Xxx 00";
+#else
     static char date_text[] = "Xxxxxxxxx 00";
     static char wday_text[] = "Xxxxxxxxx";
+#endif
     
     char *time_format;
 
@@ -90,12 +97,24 @@ void update_time(struct tm *tick_time) {
     int new_cur_day = tick_time->tm_year*1000 + tick_time->tm_yday;
     if (new_cur_day != cur_day) {
         cur_day = new_cur_day;
-        
-        strftime(date_text, sizeof(date_text), "%B %e", tick_time);
-        text_layer_set_text(layer_date_text, date_text);
 
+	
+#ifdef HANGOUT
+        strftime(wdat_text, sizeof(wdat_text), "%e", tick_time);
         strftime(wday_text, sizeof(wday_text), "%A", tick_time);
+        strftime(mnth_text, sizeof(mnth_text), "%B", tick_time);
+		strcpy(date_text, wday_text); strcat(date_text, " ");
+		strcat(date_text, mnth_text); strcat(date_text, " ");
+		strcat(date_text, wdat_text);
+#else
+        strftime(date_text, sizeof(date_text), "%B %e", tick_time);
+#endif
+		text_layer_set_text(layer_date_text, date_text);
+		
+#ifndef HANGOUT
+		strftime(wday_text, sizeof(wday_text), "%A", tick_time);
         text_layer_set_text(layer_wday_text, wday_text);
+#endif
     }
 
     if (clock_is_24h_style()) {
@@ -115,8 +134,10 @@ void update_time(struct tm *tick_time) {
     text_layer_set_text(layer_time_text, time_text);
 	
 #ifdef HANGOUT
-//    text_layer_set_text(layer_word_text, "t e s t i n g");
-//    text_layer_set_text(layer_ulne_text, "- - - - - - -");
+    static char word_text[] = "t e s t i n g";
+    static char ulne_text[] = "- - - - - - -";
+    text_layer_set_text(layer_word_text, word_text);
+    text_layer_set_text(layer_ulne_text, ulne_text);
 #endif
 	
 }
@@ -185,34 +206,43 @@ void handle_init(void) {
     img_battery_charge = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BATTERY_CHARGE);
 
     // layers
-    layer_wday_text = text_layer_create(GRect(8, 47, 144-8, 168-68));
+#ifdef HANGOUT
+    layer_date_text = text_layer_create(GRect(8, 48, 144-8, 40));
+    layer_time_text = text_layer_create(GRect(7, 72, 144-7, 40));
+    layer_line      = layer_create(GRect(8, 74, 128, 2));
+#else
     layer_date_text = text_layer_create(GRect(8, 68, 144-8, 168-68));
     layer_time_text = text_layer_create(GRect(7, 92, 144-7, 168-92));
-    layer_batt_text = text_layer_create(GRect(3,20,30,20));
+    layer_line      = layer_create(GRect(8, 97, 128, 2));
+#endif
+
+    layer_wday_text = text_layer_create(GRect(8, 47, 144-8, 168-68));
+	layer_batt_text = text_layer_create(GRect(3,20,30,20));
     layer_batt_img  = bitmap_layer_create(GRect(10, 10, 16, 16));
     layer_conn_img  = bitmap_layer_create(GRect(118, 12, 20, 20));
-    layer_line      = layer_create(GRect(8, 97, 128, 2));
 
 #ifdef HANGOUT
-	layer_word_text = text_layer_create(GRect(8, 47, 144-8, 168-68));
-	text_layer_set_background_color(layer_word_text, GColorClear);
-	text_layer_set_font(layer_word_text, FONT_KEY_GOTHIC_18);
+	layer_word_text = text_layer_create(GRect(7, 120, 144-7, 40));
+    text_layer_set_text_color(layer_word_text, GColorWhite);
+	text_layer_set_background_color(layer_word_text, GColorBlack);
+    text_layer_set_font(layer_word_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_18)));
     text_layer_set_text_alignment(layer_word_text, GTextAlignmentCenter);
 
-	layer_ulne_text = text_layer_create(GRect(8, 47, 144-8, 168-68));
-    text_layer_set_background_color(layer_ulne_text, GColorClear);
-    text_layer_set_font(layer_ulne_text, FONT_KEY_GOTHIC_18);
+	layer_ulne_text = text_layer_create(GRect(7, 140, 144-7, 40));
+    text_layer_set_text_color(layer_ulne_text, GColorWhite);
+    text_layer_set_background_color(layer_ulne_text, GColorBlack);
+    text_layer_set_font(layer_ulne_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_18)));
     text_layer_set_text_alignment(layer_ulne_text, GTextAlignmentCenter);
 #endif
 	
     text_layer_set_background_color(layer_wday_text, GColorClear);
-    text_layer_set_font(layer_wday_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_21)));
+    text_layer_set_font(layer_wday_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_18)));
 
     text_layer_set_background_color(layer_date_text, GColorClear);
-    text_layer_set_font(layer_date_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_21)));
+    text_layer_set_font(layer_date_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_18)));
 
     text_layer_set_background_color(layer_time_text, GColorClear);
-    text_layer_set_font(layer_time_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_BOLD_SUBSET_49)));
+    text_layer_set_font(layer_time_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_BOLD_SUBSET_36)));
 
     text_layer_set_background_color(layer_batt_text, GColorClear);
     text_layer_set_font(layer_batt_text, fonts_get_system_font(FONT_KEY_FONT_FALLBACK));
@@ -237,11 +267,6 @@ void handle_init(void) {
 #ifdef HANGOUT
     layer_add_child(window_layer, text_layer_get_layer(layer_word_text));
     layer_add_child(window_layer, text_layer_get_layer(layer_ulne_text));
-	
-    static char word_text[] = "t e s t i n g";
-    static char ulne_text[] = "- - - - - - -";
-    text_layer_set_text(layer_word_text, word_text);
-    text_layer_set_text(layer_ulne_text, ulne_text);
 #endif
 
     // style
