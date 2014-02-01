@@ -171,10 +171,10 @@ void update_time(struct tm *tick_time) {
 	static int pick_msk;
 	static int cmpl_msk;
 	static char word_text[16];
-	static char ulne_text[16];
 	static char owrd_text[32];
     static char blanks[]    = "                               ";
-    static char underline[] = "- - - - - - - - - - - - - - - -";
+//	static char ulne_text[16];
+//    static char underline[] = "= = = = = = = = = = = = = = = =";
 	if (new_word) {
 		lttr_msk = 0; pick_msk = 0;
 		word_idx = rand() % WL_LEN;
@@ -183,8 +183,8 @@ void update_time(struct tm *tick_time) {
 		cmpl_msk = (1 << word_len) - 1;
 		strncpy(owrd_text, blanks, 2*word_len-1);
   		owrd_text[2*word_len] = '\0';
-		strncpy(ulne_text, underline, 2*word_len-1); 
-		ulne_text[2*word_len] = '\0';
+//		strncpy(ulne_text, underline, 2*word_len-1); 
+//		ulne_text[2*word_len] = '\0';
 		new_word = false;
 	} else {
 		if (lttr_msk == cmpl_msk) {
@@ -204,11 +204,15 @@ void update_time(struct tm *tick_time) {
 //	strcpy(debug0, itoa(lttr_msk*100 + pick_msk));
 	
 	for (int i=0; i<word_len; i++) { 
-		if (lttr_msk & (1<<i)) owrd_text[2*i] = word_text[i]; 
+		if (lttr_msk & (1<<i)) {
+			owrd_text[2*i] = word_text[i]; 
+		} else {
+			owrd_text[2*i] = '_'; 
+		}
 	}
 	
 	text_layer_set_text(layer_word_text, owrd_text);
-    text_layer_set_text(layer_ulne_text, ulne_text);
+//    text_layer_set_text(layer_ulne_text, ulne_text);
 #endif
 	
 }
@@ -278,7 +282,7 @@ void handle_init(void) {
 
     // layers
 #ifdef HANGOUT
-    layer_date_text = text_layer_create(GRect(8, 46, 144-8, 40));
+    layer_date_text = text_layer_create(GRect(8, 43, 144-8, 30));
     layer_time_text = text_layer_create(GRect(7, 69, 144-7, 50));
     layer_line      = layer_create(GRect(8, 72, 128, 2));
 #else
@@ -293,24 +297,24 @@ void handle_init(void) {
     layer_conn_img  = bitmap_layer_create(GRect(118, 12, 20, 20));
 
 #ifdef HANGOUT
-	layer_word_text = text_layer_create(GRect(7, 130, 144-7, 40));
+	layer_word_text = text_layer_create(GRect(7, 130, 144-7, 30));
     text_layer_set_text_color(layer_word_text, GColorWhite);
-	text_layer_set_background_color(layer_word_text, GColorBlack);
-    text_layer_set_font(layer_word_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_20)));
+	text_layer_set_background_color(layer_word_text, GColorClear);
+    text_layer_set_font(layer_word_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_22)));
     text_layer_set_text_alignment(layer_word_text, GTextAlignmentCenter);
 
-	layer_ulne_text = text_layer_create(GRect(7, 150, 144-7, 40));
-    text_layer_set_text_color(layer_ulne_text, GColorWhite);
-    text_layer_set_background_color(layer_ulne_text, GColorBlack);
-    text_layer_set_font(layer_ulne_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_20)));
-    text_layer_set_text_alignment(layer_ulne_text, GTextAlignmentCenter);
+//	layer_ulne_text = text_layer_create(GRect(7, 150, 144-7, 30));
+//    text_layer_set_text_color(layer_ulne_text, GColorWhite);
+//    text_layer_set_background_color(layer_ulne_text, GColorClear);
+//    text_layer_set_font(layer_ulne_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_22)));
+//    text_layer_set_text_alignment(layer_ulne_text, GTextAlignmentCenter);
 #endif
 	
     text_layer_set_background_color(layer_wday_text, GColorClear);
-    text_layer_set_font(layer_wday_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_20)));
+    text_layer_set_font(layer_wday_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_22)));
 
     text_layer_set_background_color(layer_date_text, GColorClear);
-    text_layer_set_font(layer_date_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_20)));
+    text_layer_set_font(layer_date_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_22)));
 
     text_layer_set_background_color(layer_time_text, GColorClear);
     text_layer_set_font(layer_time_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_BOLD_SUBSET_48)));
@@ -337,7 +341,7 @@ void handle_init(void) {
 	
 #ifdef HANGOUT
     layer_add_child(window_layer, text_layer_get_layer(layer_word_text));
-    layer_add_child(window_layer, text_layer_get_layer(layer_ulne_text));
+//    layer_add_child(window_layer, text_layer_get_layer(layer_ulne_text));
 	srand(time(NULL));
 #endif
 
