@@ -1,0 +1,66 @@
+{
+    "versionLabel": "1.4",
+    "uuid": "b95eda21-5326-4fb0-ba9f-d2b1d259f625",
+    "appKeys": {},
+    "longName": "Simple F",
+    "versionCode": 1,
+    "capabilities": [
+        ""
+    ],
+    "shortName": "Simple F",
+    "companyName": "QuickFox",
+    "watchapp": {
+        "watchface": true
+    },
+    "resources": {
+        "media": [
+            {
+                "characterRegex": "[:0-9]",
+                "type": "font",
+                "name": "FONT_ROBOTO_BOLD_SUBSET_49",
+                "file": "fonts/Roboto-Bold.ttf"
+            },
+            {
+                "type": "font",
+                "name": "FONT_ROBOTO_CONDENSED_21",
+                "file": "fonts/Roboto-Condensed.ttf"
+            },
+            {
+                "menuIcon": true,
+                "type": "png",
+                "name": "IMAGE_MENU_ICON",
+                "file": "images/menu_icon_simplicity.png"
+            },
+            {
+                "type": "png",
+                "name": "IMAGE_BATTERY_CHARGE",
+                "file": "images/battery-charge.png"
+            },
+            {
+                "type": "png",
+                "name": "IMAGE_BATTERY_LOW",
+                "file": "images/battery-low.png"
+            },
+            {
+                "type": "png",
+                "name": "IMAGE_BATTERY_HALF",
+                "file": "images/battery-half.png"
+            },
+            {
+                "type": "png",
+                "name": "IMAGE_BATTERY_FULL",
+                "file": "images/battery.png"
+            },
+            {
+                "type": "png",
+                "name": "IMAGE_CONNECT",
+                "file": "images/phone.png"
+            },
+            {
+                "type": "png",
+                "name": "IMAGE_DISCONNECT",
+                "file": "images/phone-lost.png"
+            }
+        ]
+    }
+}
