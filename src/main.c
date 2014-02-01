@@ -173,13 +173,16 @@ void update_time(struct tm *tick_time) {
 	static char word_text[16];
 	static char ulne_text[16];
 	static char owrd_text[32];
+    static char blanks[]    = "                               ";
     static char underline[] = "- - - - - - - - - - - - - - - -";
 	if (new_word) {
-		lttr_msk = 0;
+		lttr_msk = 0; pick_msk = 0;
 		word_idx = rand() % WL_LEN;
 		strcpy(word_text, wlst[word_idx]);
-		word_len = strlen(wlst[word_idx]);
+		word_len = strlen(word_text);
 		cmpl_msk = (1 << word_len) - 1;
+		strncpy(owrd_text, blanks, 2*word_len-1);
+  		owrd_text[2*word_len] = '\0';
 		strncpy(ulne_text, underline, 2*word_len-1); 
 		ulne_text[2*word_len] = '\0';
 		new_word = false;
@@ -196,12 +199,14 @@ void update_time(struct tm *tick_time) {
 			lttr_msk = lttr_msk | pick_msk;
 		}
 	}
+
+//	static char debug0[32];
+//	strcpy(debug0, itoa(lttr_msk*100 + pick_msk));
 	
-	text_layer_set_text(layer_date_text, itoa(cmpl_msk*1000 + pick_msk*100 + lttr_msk));		// debug
-	strcpy(owrd_text, "                                ");
 	for (int i=0; i<word_len; i++) { 
-		if (true) owrd_text[2*i] = '*'; 
+		if (lttr_msk & (1<<i)) owrd_text[2*i] = word_text[i]; 
 	}
+	
 	text_layer_set_text(layer_word_text, owrd_text);
     text_layer_set_text(layer_ulne_text, ulne_text);
 #endif
@@ -273,9 +278,9 @@ void handle_init(void) {
 
     // layers
 #ifdef HANGOUT
-    layer_date_text = text_layer_create(GRect(8, 48, 144-8, 40));
-    layer_time_text = text_layer_create(GRect(7, 72, 144-7, 50));
-    layer_line      = layer_create(GRect(8, 74, 128, 2));
+    layer_date_text = text_layer_create(GRect(8, 46, 144-8, 40));
+    layer_time_text = text_layer_create(GRect(7, 69, 144-7, 50));
+    layer_line      = layer_create(GRect(8, 72, 128, 2));
 #else
     layer_date_text = text_layer_create(GRect(8, 68, 144-8, 168-68));
     layer_time_text = text_layer_create(GRect(7, 92, 144-7, 168-92));
