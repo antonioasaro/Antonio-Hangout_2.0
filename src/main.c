@@ -9,6 +9,10 @@ Window *window;
 TextLayer *layer_date_text;
 TextLayer *layer_wday_text;
 TextLayer *layer_time_text;
+#ifdef HANGOUT
+TextLayer *layer_word_text;
+TextLayer *layer_ulne_text;
+#endif
 Layer *layer_line;
 
 BitmapLayer *layer_batt_img;
@@ -113,6 +117,10 @@ void update_time(struct tm *tick_time) {
 
 void set_style(void) {
     bool inverse = persist_read_bool(STYLE_KEY);
+
+#ifdef HANGOUT
+	inverse = false;
+#endif
     
     background_color  = inverse ? GColorWhite : GColorBlack;
     foreground_color  = inverse ? GColorBlack : GColorWhite;
@@ -179,6 +187,18 @@ void handle_init(void) {
     layer_conn_img  = bitmap_layer_create(GRect(118, 12, 20, 20));
     layer_line      = layer_create(GRect(8, 97, 128, 2));
 
+#ifdef HANGOUT
+	layer_word_text = text_layer_create(GRect(8, 110, 144-8, 168-68));
+	text_layer_set_background_color(layer_word_text, GColorClear);
+	text_layer_set_font(layer_word_text, FONT_KEY_GOTHIC_18);
+    text_layer_set_text_alignment(layer_word_text, GTextAlignmentCenter);
+
+	layer_ulne_text = text_layer_create(GRect(8, 120, 144-8, 168-68));
+    text_layer_set_background_color(layer_ulne_text, GColorClear);
+    text_layer_set_font(layer_ulne_text, FONT_KEY_GOTHIC_18);
+    text_layer_set_text_alignment(layer_ulne_text, GTextAlignmentCenter);
+#endif
+	
     text_layer_set_background_color(layer_wday_text, GColorClear);
     text_layer_set_font(layer_wday_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_21)));
 
@@ -207,6 +227,11 @@ void handle_init(void) {
     layer_add_child(window_layer, text_layer_get_layer(layer_date_text));
     layer_add_child(window_layer, text_layer_get_layer(layer_time_text));
     layer_add_child(window_layer, text_layer_get_layer(layer_batt_text));
+	
+#ifdef HANGOUT
+    layer_add_child(window_layer, text_layer_get_layer(layer_word_text));
+    layer_add_child(window_layer, text_layer_get_layer(layer_ulne_text));
+#endif
 
     // style
     set_style();
