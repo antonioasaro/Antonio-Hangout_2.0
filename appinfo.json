@@ -15,36 +15,14 @@
     "resources": {
         "media": [
             {
-                "characterRegex": "[:0-9]",
-                "type": "font",
-                "name": "FONT_ROBOTO_BOLD_SUBSET_49",
-                "file": "fonts/Roboto-Bold.ttf"
-            },
-            {
-                "type": "font",
-                "name": "FONT_ROBOTO_CONDENSED_21",
-                "file": "fonts/Roboto-Condensed.ttf"
-            },
-            {
-                "menuIcon": true,
                 "type": "png",
-                "name": "IMAGE_MENU_ICON",
-                "file": "images/menu_icon_simplicity.png"
+                "name": "IMAGE_DISCONNECT",
+                "file": "images/disconnect.png"
             },
             {
                 "type": "png",
-                "name": "IMAGE_BATTERY_CHARGE",
-                "file": "images/battery-charge.png"
-            },
-            {
-                "type": "png",
-                "name": "IMAGE_BATTERY_LOW",
-                "file": "images/battery-low.png"
-            },
-            {
-                "type": "png",
-                "name": "IMAGE_BATTERY_HALF",
-                "file": "images/battery-half.png"
+                "name": "IMAGE_CONNECT",
+                "file": "images/bluetooth.png"
             },
             {
                 "type": "png",
@@ -53,13 +31,35 @@
             },
             {
                 "type": "png",
-                "name": "IMAGE_CONNECT",
-                "file": "images/phone.png"
+                "name": "IMAGE_BATTERY_HALF",
+                "file": "images/battery-half.png"
             },
             {
                 "type": "png",
-                "name": "IMAGE_DISCONNECT",
-                "file": "images/phone-lost.png"
+                "name": "IMAGE_BATTERY_LOW",
+                "file": "images/battery-low.png"
+            },
+            {
+                "type": "png",
+                "name": "IMAGE_BATTERY_CHARGE",
+                "file": "images/battery-charge.png"
+            },
+            {
+                "menuIcon": true,
+                "type": "png",
+                "name": "IMAGE_MENU_ICON",
+                "file": "images/menu_icon_simplicity.png"
+            },
+            {
+                "type": "font",
+                "name": "FONT_ROBOTO_CONDENSED_21",
+                "file": "fonts/Roboto-Condensed.ttf"
+            },
+            {
+                "characterRegex": "[:0-9]",
+                "type": "font",
+                "name": "FONT_ROBOTO_BOLD_SUBSET_49",
+                "file": "fonts/Roboto-Bold.ttf"
             }
         ]
     }
