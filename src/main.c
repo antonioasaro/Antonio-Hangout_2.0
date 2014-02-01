@@ -30,6 +30,33 @@ int cur_day = -1;
 bool new_word = true;
 #endif
 	
+	
+#ifdef HANGOUT
+#define INT_DIGITS 5		/* enough for 64 bit integer */
+char *itoa(int i)
+{
+  /* Room for INT_DIGITS digits, - and '\0' */
+  static char buf[INT_DIGITS + 2];
+  char *p = buf + INT_DIGITS + 1;	/* points to terminating '\0' */
+  if (i >= 0) {
+    do {
+      *--p = '0' + (i % 10);
+      i /= 10;
+    } while (i != 0);
+    return p;
+  }
+  else {			/* i < 0 */
+    do {
+      *--p = '0' - (i % 10);
+      i /= 10;
+    } while (i != 0);
+    *--p = '-';
+  }
+  return p;
+}
+#endif
+
+	
 void handle_battery(BatteryChargeState charge_state) {
     static char battery_text[] = "100 ";
 
@@ -145,18 +172,18 @@ void update_time(struct tm *tick_time) {
 	static int cmpl_msk;
 	static char word_text[16];
 	static char ulne_text[16];
-    static char underline[] = "----------------";
+	static char owrd_text[32];
+    static char underline[] = "- - - - - - - - - - - - - - - -";
 	if (new_word) {
 		lttr_msk = 0;
 		word_idx = rand() % WL_LEN;
 		strcpy(word_text, wlst[word_idx]);
 		word_len = strlen(wlst[word_idx]);
 		cmpl_msk = (1 << word_len) - 1;
-		strncpy(ulne_text, underline, word_len); 
-		ulne_text[word_len+1] = '\0';
+		strncpy(ulne_text, underline, 2*word_len-1); 
+		ulne_text[2*word_len] = '\0';
 		new_word = false;
 	} else {
-		strcpy(word_text, wlst[word_idx]);
 		if (lttr_msk == cmpl_msk) {
 			new_word = true;
 		} else {
@@ -170,14 +197,12 @@ void update_time(struct tm *tick_time) {
 		}
 	}
 	
+	text_layer_set_text(layer_date_text, itoa(cmpl_msk*1000 + pick_msk*100 + lttr_msk));		// debug
+	strcpy(owrd_text, "                                ");
 	for (int i=0; i<word_len; i++) { 
-		if (lttr_msk & (1<<i)) {
-			word_text[i] = word_text[i]; 
-		} else {
-			word_text[i] = ' '; 
-		}
+		if (true) owrd_text[2*i] = '*'; 
 	}
-	text_layer_set_text(layer_word_text, word_text);
+	text_layer_set_text(layer_word_text, owrd_text);
     text_layer_set_text(layer_ulne_text, ulne_text);
 #endif
 	
