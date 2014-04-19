@@ -1,65 +1,65 @@
 {
-    "shortName": "Hangout",
+    "versionCode": 1,
+    "versionLabel": "1.0",
+    "appKeys": {},
     "capabilities": [
         ""
     ],
-    "watchapp": {
-        "watchface": true
-    },
-    "appKeys": {},
-    "versionCode": 1,
-    "companyName": "-",
-    "longName": "Hangout",
-    "versionLabel": "1.0",
     "uuid": "b95eda21-5326-4fb0-ba9f-d2b1d259f6aa",
     "resources": {
         "media": [
             {
-                "characterRegex": "[:0-9]",
-                "file": "fonts/Roboto-Bold.ttf",
                 "name": "FONT_ROBOTO_BOLD_SUBSET_48",
-                "type": "font"
+                "type": "font",
+                "file": "fonts/Roboto-Bold.ttf",
+                "characterRegex": "[:0-9]"
             },
             {
-                "file": "fonts/Roboto-Condensed.ttf",
                 "name": "FONT_ROBOTO_CONDENSED_22",
-                "type": "font"
+                "type": "font",
+                "file": "fonts/Roboto-Condensed.ttf"
             },
             {
-                "file": "images/battery-charge.png",
                 "name": "IMAGE_BATTERY_CHARGE",
-                "type": "png"
+                "type": "png",
+                "file": "images/battery-charge.png"
             },
             {
-                "file": "images/battery-low.png",
                 "name": "IMAGE_BATTERY_LOW",
-                "type": "png"
+                "type": "png",
+                "file": "images/battery-low.png"
             },
             {
-                "file": "images/battery-half.png",
                 "name": "IMAGE_BATTERY_HALF",
-                "type": "png"
+                "type": "png",
+                "file": "images/battery-half.png"
             },
             {
-                "file": "images/battery.png",
                 "name": "IMAGE_BATTERY_FULL",
-                "type": "png"
+                "type": "png",
+                "file": "images/battery.png"
             },
             {
-                "file": "images/bluetooth.png",
                 "name": "IMAGE_CONNECT",
-                "type": "png"
+                "type": "png",
+                "file": "images/bluetooth.png"
             },
             {
-                "file": "images/disconnect.png",
                 "name": "IMAGE_DISCONNECT",
-                "type": "png"
+                "type": "png",
+                "file": "images/disconnect.png"
             },
             {
-                "file": "images/menu_icon.png",
                 "name": "IMAGE_MENU_ICON",
-                "type": "png"
+                "type": "png",
+                "file": "images/menu_icon.png"
             }
         ]
-    }
+    },
+    "longName": "Hangout",
+    "watchapp": {
+        "watchface": true
+    },
+    "companyName": "-",
+    "shortName": "Hangout"
 }
