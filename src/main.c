@@ -1,18 +1,16 @@
 #include "pebble.h"
 #include "vars.h"
 
-GColor background_color = GColorWhite;
-GColor foreground_color = GColorBlack;
-GCompOp compositing_mode = GCompOpAssign;
+// static int background_color = GColorWhite;
+// static int foreground_color = GColorBlack;
+// static GCompOp compositing_mode = GCompOpAssign;
 
 Window *window;
 TextLayer *layer_date_text;
 TextLayer *layer_wday_text;
 TextLayer *layer_time_text;
-#ifdef HANGOUT
 TextLayer *layer_word_text;
 TextLayer *layer_ulne_text;
-#endif
 Layer *layer_line;
 
 BitmapLayer *layer_batt_img;
@@ -26,12 +24,9 @@ GBitmap *img_bt_disconnect;
 TextLayer *layer_batt_text;
 int charge_percent = 0;
 int cur_day = -1;
-#ifdef HANGOUT
 bool new_word = true;
-#endif
 	
 	
-#ifdef HANGOUT
 #define INT_DIGITS 5		/* enough for 64 bit integer */
 char *itoa(int i)
 {
@@ -54,8 +49,6 @@ char *itoa(int i)
   }
   return p;
 }
-#endif
-
 	
 void handle_battery(BatteryChargeState charge_state) {
     static char battery_text[] = "100 ";
@@ -73,14 +66,6 @@ void handle_battery(BatteryChargeState charge_state) {
         } else {
             bitmap_layer_set_bitmap(layer_batt_img, img_battery_full);
         }
-
-        /*if (charge_state.charge_percent < charge_percent) {
-            if (charge_state.charge_percent==20){
-                vibes_double_pulse();
-            } else if(charge_state.charge_percent==10){
-                vibes_long_pulse();
-            }
-        }*/ 
     }
     charge_percent = charge_state.charge_percent;
     
@@ -104,66 +89,25 @@ void handle_appfocus(bool in_focus){
 }
 
 void line_layer_update_callback(Layer *layer, GContext* ctx) {
-    graphics_context_set_fill_color(ctx, foreground_color);
+    graphics_context_set_fill_color(ctx, GColorBlack);
     graphics_fill_rect(ctx, layer_get_bounds(layer), 0, GCornerNone);
 }
 
-void update_time(struct tm *tick_time) {
-    // Need to be static because they're used by the system later.
-    static char time_text[] = "00:00";
-#ifdef HANGOUT
-    static char wdat_text[] = "00";
-    static char wday_text[] = "Xxx";
-    static char mnth_text[] = "Xxx";
-    static char date_text[] = "Xxx Xxx 00  ";
-#else
-    static char date_text[] = "Xxxxxxxxx 00";
-    static char wday_text[] = "Xxxxxxxxx";
-#endif
-    
-    char *time_format;
 
-    // Only update the date when it's changed.
-    int new_cur_day = tick_time->tm_year*1000 + tick_time->tm_yday;
-    if (new_cur_day != cur_day) {
-        cur_day = new_cur_day;
+void update_time(struct tm *t) {
+	static char dateText[] = "XXX XXX 00"; 
+    strftime(dateText, sizeof(dateText), "%a %b %d", t);
+	text_layer_set_text(layer_date_text, dateText);
 
+	static char hourText[] = "04:44pm"; 	//this is the longest possible text based on the font used
+	if(clock_is_24h_style())
+		strftime(hourText, sizeof(hourText), "%H:%M", t);
+	else
+		strftime(hourText, sizeof(hourText), "%I:%M", t);
+	if (hourText[0] == '0') { hourText[0] = ' '; }
+	if (t->tm_hour < 12) strcat(hourText, "am"); else strcat(hourText, "pm");
+	text_layer_set_text(layer_time_text, hourText);
 	
-#ifdef HANGOUT
-        strftime(wdat_text, sizeof(wdat_text), "%e", tick_time);
-        strftime(wday_text, sizeof(wday_text), "%A", tick_time);
-        strftime(mnth_text, sizeof(mnth_text), "%B", tick_time);
-		strcpy(date_text, wday_text); strcat(date_text, "  ");
-		strcat(date_text, mnth_text); strcat(date_text, " ");
-		strcat(date_text, wdat_text);
-#else
-        strftime(date_text, sizeof(date_text), "%B %e", tick_time);
-#endif
-		text_layer_set_text(layer_date_text, date_text);
-		
-#ifndef HANGOUT
-		strftime(wday_text, sizeof(wday_text), "%A", tick_time);
-        text_layer_set_text(layer_wday_text, wday_text);
-#endif
-    }
-
-    if (clock_is_24h_style()) {
-        time_format = "%R";
-    } else {
-        time_format = "%I:%M";
-    }
-
-    strftime(time_text, sizeof(time_text), time_format, tick_time);
-
-    // Kludge to handle lack of non-padded hour format string
-    // for twelve hour clock.
-    if (!clock_is_24h_style() && (time_text[0] == '0')) {
-        memmove(time_text, &time_text[1], sizeof(time_text) - 1);
-    }
-
-    text_layer_set_text(layer_time_text, time_text);
-	
-#ifdef HANGOUT
     static int word_idx;
 	static int word_len;
 	static int lttr_msk;
@@ -173,8 +117,6 @@ void update_time(struct tm *tick_time) {
 	static char word_text[16];
 	static char owrd_text[32];
     static char blanks[]    = "                               ";
-//	static char ulne_text[16];
-//    static char underline[] = "= = = = = = = = = = = = = = = =";
 	if (new_word) {
 		lttr_msk = 0; pick_msk = 0;
 		word_idx = rand() % WL_LEN;
@@ -183,8 +125,6 @@ void update_time(struct tm *tick_time) {
 		cmpl_msk = (1 << word_len) - 1;
 		strncpy(owrd_text, blanks, 2*word_len-1);
   		owrd_text[2*word_len] = '\0';
-//		strncpy(ulne_text, underline, 2*word_len-1); 
-//		ulne_text[2*word_len] = '\0';
 		new_word = false;
 	} else {
 		if (lttr_msk == cmpl_msk) {
@@ -199,9 +139,6 @@ void update_time(struct tm *tick_time) {
 			lttr_msk = lttr_msk | pick_msk;
 		}
 	}
-
-//	static char debug0[32];
-//	strcpy(debug0, itoa(lttr_msk*100 + pick_msk));
 	
 	for (int i=0; i<word_len; i++) { 
 		if (lttr_msk & (1<<i)) {
@@ -212,29 +149,15 @@ void update_time(struct tm *tick_time) {
 	}
 	
 	text_layer_set_text(layer_word_text, owrd_text);
-//    text_layer_set_text(layer_ulne_text, ulne_text);
-#endif
-	
 }
 
 void set_style(void) {
-    bool inverse = persist_read_bool(STYLE_KEY);
 
-#ifdef HANGOUT
-	inverse = false;
-#endif
-    
-    background_color  = inverse ? GColorWhite : GColorBlack;
-    foreground_color  = inverse ? GColorBlack : GColorWhite;
-    compositing_mode  = inverse ? GCompOpAssign : GCompOpAssignInverted;
-    
-    window_set_background_color(window, background_color);
-    text_layer_set_text_color(layer_time_text, foreground_color);
-    text_layer_set_text_color(layer_wday_text, foreground_color);
-    text_layer_set_text_color(layer_date_text, foreground_color);
-    text_layer_set_text_color(layer_batt_text, foreground_color);
-    bitmap_layer_set_compositing_mode(layer_batt_img, compositing_mode);
-    bitmap_layer_set_compositing_mode(layer_conn_img, compositing_mode);
+	window_set_background_color(window, GColorBlack);
+    text_layer_set_text_color(layer_time_text, GColorWhite);
+    text_layer_set_text_color(layer_wday_text, GColorWhite);
+    text_layer_set_text_color(layer_date_text, GColorWhite);
+    text_layer_set_text_color(layer_batt_text, GColorWhite);
 }
 
 void force_update(void) {
@@ -281,44 +204,32 @@ void handle_init(void) {
     img_battery_charge = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BATTERY_CHARGE);
 
     // layers
-#ifdef HANGOUT
     layer_date_text = text_layer_create(GRect(8, 43, 144-8, 30));
     layer_time_text = text_layer_create(GRect(7, 69, 144-7, 50));
     layer_line      = layer_create(GRect(8, 72, 128, 2));
-#else
-    layer_date_text = text_layer_create(GRect(8, 68, 144-8, 168-68));
-    layer_time_text = text_layer_create(GRect(7, 92, 144-7, 168-92));
-    layer_line      = layer_create(GRect(8, 97, 128, 2));
-#endif
 
-    layer_wday_text = text_layer_create(GRect(8, 47, 144-8, 168-68));
+	layer_wday_text = text_layer_create(GRect(8, 47, 144-8, 168-68));
 	layer_batt_text = text_layer_create(GRect(3,20,30,20));
     layer_batt_img  = bitmap_layer_create(GRect(10, 10, 16, 16));
     layer_conn_img  = bitmap_layer_create(GRect(118, 12, 20, 20));
 
-#ifdef HANGOUT
 	layer_word_text = text_layer_create(GRect(7, 130, 144-7, 30));
     text_layer_set_text_color(layer_word_text, GColorWhite);
 	text_layer_set_background_color(layer_word_text, GColorClear);
     text_layer_set_font(layer_word_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_22)));
     text_layer_set_text_alignment(layer_word_text, GTextAlignmentCenter);
 
-//	layer_ulne_text = text_layer_create(GRect(7, 150, 144-7, 30));
-//    text_layer_set_text_color(layer_ulne_text, GColorWhite);
-//    text_layer_set_background_color(layer_ulne_text, GColorClear);
-//    text_layer_set_font(layer_ulne_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_22)));
-//    text_layer_set_text_alignment(layer_ulne_text, GTextAlignmentCenter);
-#endif
-	
     text_layer_set_background_color(layer_wday_text, GColorClear);
     text_layer_set_font(layer_wday_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_22)));
 
     text_layer_set_background_color(layer_date_text, GColorClear);
     text_layer_set_font(layer_date_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_22)));
-
+	text_layer_set_text_alignment(layer_date_text, GTextAlignmentCenter);
+	
     text_layer_set_background_color(layer_time_text, GColorClear);
     text_layer_set_font(layer_time_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_BOLD_SUBSET_48)));
-
+    text_layer_set_text_alignment(layer_time_text, GTextAlignmentCenter);
+	
     text_layer_set_background_color(layer_batt_text, GColorClear);
     text_layer_set_font(layer_batt_text, fonts_get_system_font(FONT_KEY_FONT_FALLBACK));
     text_layer_set_text_alignment(layer_batt_text, GTextAlignmentCenter);
@@ -339,11 +250,8 @@ void handle_init(void) {
     layer_add_child(window_layer, text_layer_get_layer(layer_time_text));
     layer_add_child(window_layer, text_layer_get_layer(layer_batt_text));
 	
-#ifdef HANGOUT
     layer_add_child(window_layer, text_layer_get_layer(layer_word_text));
-//    layer_add_child(window_layer, text_layer_get_layer(layer_ulne_text));
 	srand(time(NULL));
-#endif
 
     // style
     set_style();

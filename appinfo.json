@@ -1,65 +1,74 @@
 {
-    "versionCode": 1,
-    "versionLabel": "1.0",
     "appKeys": {},
     "capabilities": [
         ""
     ],
-    "uuid": "b95eda21-5326-4fb0-ba9f-d2b1d259f6aa",
+    "companyName": "-",
+    "enableMultiJS": false,
+    "longName": "Hangout",
+    "projectType": "native",
     "resources": {
         "media": [
             {
-                "name": "FONT_ROBOTO_BOLD_SUBSET_48",
-                "type": "font",
-                "file": "fonts/Roboto-Bold.ttf",
-                "characterRegex": "[:0-9]"
-            },
-            {
-                "name": "FONT_ROBOTO_CONDENSED_22",
-                "type": "font",
-                "file": "fonts/Roboto-Condensed.ttf"
-            },
-            {
-                "name": "IMAGE_BATTERY_CHARGE",
-                "type": "png",
-                "file": "images/battery-charge.png"
-            },
-            {
-                "name": "IMAGE_BATTERY_LOW",
-                "type": "png",
-                "file": "images/battery-low.png"
-            },
-            {
-                "name": "IMAGE_BATTERY_HALF",
-                "type": "png",
-                "file": "images/battery-half.png"
-            },
-            {
-                "name": "IMAGE_BATTERY_FULL",
-                "type": "png",
-                "file": "images/battery.png"
-            },
-            {
-                "name": "IMAGE_CONNECT",
-                "type": "png",
-                "file": "images/bluetooth.png"
-            },
-            {
-                "name": "IMAGE_DISCONNECT",
-                "type": "png",
-                "file": "images/disconnect.png"
-            },
-            {
+                "file": "images/menu_icon.png",
                 "name": "IMAGE_MENU_ICON",
-                "type": "png",
-                "file": "images/menu_icon.png"
+                "type": "png"
+            },
+            {
+                "file": "images/disconnect.png",
+                "name": "IMAGE_DISCONNECT",
+                "type": "png"
+            },
+            {
+                "file": "images/bluetooth.png",
+                "name": "IMAGE_CONNECT",
+                "type": "png"
+            },
+            {
+                "file": "images/battery.png",
+                "name": "IMAGE_BATTERY_FULL",
+                "type": "png"
+            },
+            {
+                "file": "images/battery-half.png",
+                "name": "IMAGE_BATTERY_HALF",
+                "type": "png"
+            },
+            {
+                "file": "images/battery-low.png",
+                "name": "IMAGE_BATTERY_LOW",
+                "type": "png"
+            },
+            {
+                "file": "images/battery-charge.png",
+                "name": "IMAGE_BATTERY_CHARGE",
+                "type": "png"
+            },
+            {
+                "characterRegex": "[:0-9]",
+                "compatibility": "2.7",
+                "file": "fonts/Roboto-Bold.ttf",
+                "name": "FONT_ROBOTO_BOLD_SUBSET_48",
+                "type": "font"
+            },
+            {
+                "compatibility": "2.7",
+                "file": "fonts/Roboto-Condensed.ttf",
+                "name": "FONT_ROBOTO_CONDENSED_22",
+                "type": "font"
             }
         ]
     },
-    "longName": "Hangout",
+    "sdkVersion": "3",
+    "shortName": "Hangout",
+    "targetPlatforms": [
+        "aplite",
+        "basalt",
+        "chalk"
+    ],
+    "uuid": "b95eda21-5326-4fb0-ba9f-d2b1d259f6aa",
+    "versionLabel": "1.1",
     "watchapp": {
         "watchface": true
-    },
-    "companyName": "-",
-    "shortName": "Hangout"
+    }
 }
