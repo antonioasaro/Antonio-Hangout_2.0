@@ -49,7 +49,7 @@
                 "characterRegex": "[:0-9]",
                 "compatibility": "2.7",
                 "file": "fonts/Roboto-Bold.ttf",
-                "name": "FONT_ROBOTO_BOLD_SUBSET_48",
+                "name": "FONT_ROBOTO_BOLD_SUBSET_46",
                 "targetPlatforms": null,
                 "type": "font"
             },
@@ -73,8 +73,8 @@
         "basalt",
         "chalk"
     ],
-    "uuid": "b95eda21-5326-4fb0-ba9f-d2b1d259f6aa",
-    "versionLabel": "1.21",
+    "uuid": "0f1c5ea8-b6cf-410b-9f36-525c7e25cbd4",
+    "versionLabel": "1.22",
     "watchapp": {
         "watchface": true
     }
