@@ -4,11 +4,17 @@
         ""
     ],
     "companyName": "-",
-    "enableMultiJS": false,
+    "enableMultiJS": true,
     "longName": "Hangout",
     "projectType": "native",
     "resources": {
         "media": [
+            {
+                "file": "images/menu_icon.png",
+                "menuIcon": true,
+                "name": "IMAGE_MENU_ICON",
+                "type": "png"
+            },
             {
                 "file": "images/disconnect.png",
                 "name": "IMAGE_DISCONNECT",
@@ -54,11 +60,6 @@
                 "type": "font"
             },
             {
-                "file": "images/menu_icon.png",
-                "name": "IMAGE_MENU_ICON",
-                "type": "png"
-            },
-            {
                 "compatibility": "2.7",
                 "file": "fonts/Roboto-Condensed.ttf",
                 "name": "FONT_ROBOTO_CONDENSED_22",
@@ -73,8 +74,8 @@
         "basalt",
         "chalk"
     ],
-    "uuid": "0f1c5ea8-b6cf-410b-9f36-525c7e25cbd4",
-    "versionLabel": "1.22",
+    "uuid": "b95eda21-5326-4fb0-ba9f-d2b1d259f6aa",
+    "versionLabel": "2.2",
     "watchapp": {
         "watchface": true
     }
