@@ -1,17 +1,10 @@
 #include "pebble.h"
 #include "vars.h"
 
-// static int background_color = GColorWhite;
-// static int foreground_color = GColorBlack;
-// static GCompOp compositing_mode = GCompOpAssign;
-
 Window *window;
 TextLayer *layer_date_text;
-TextLayer *layer_wday_text;
 TextLayer *layer_time_text;
 TextLayer *layer_word_text;
-TextLayer *layer_ulne_text;
-Layer *layer_line;
 
 BitmapLayer *layer_batt_img;
 BitmapLayer *layer_conn_img;
@@ -51,12 +44,11 @@ char *itoa(int i)
 }
 	
 void handle_battery(BatteryChargeState charge_state) {
-    static char battery_text[] = "100 ";
+    static char battery_text[] = " 100 ";
 
     if (charge_state.is_charging) {
         bitmap_layer_set_bitmap(layer_batt_img, img_battery_charge);
-
-        snprintf(battery_text, sizeof(battery_text), "+%d", charge_state.charge_percent);
+        snprintf(battery_text, sizeof(battery_text), "%d", charge_state.charge_percent);
     } else {
         snprintf(battery_text, sizeof(battery_text), "%d", charge_state.charge_percent);
         if (charge_state.charge_percent <= 20) {
@@ -67,8 +59,7 @@ void handle_battery(BatteryChargeState charge_state) {
             bitmap_layer_set_bitmap(layer_batt_img, img_battery_full);
         }
     }
-    charge_percent = charge_state.charge_percent;
-    
+    charge_percent = charge_state.charge_percent; 
     text_layer_set_text(layer_batt_text, battery_text);
 }
 
@@ -87,12 +78,6 @@ void handle_appfocus(bool in_focus){
         handle_battery(battery_state_service_peek());
     }
 }
-
-void line_layer_update_callback(Layer *layer, GContext* ctx) {
-    graphics_context_set_fill_color(ctx, GColorBlack);
-    graphics_fill_rect(ctx, layer_get_bounds(layer), 0, GCornerNone);
-}
-
 
 void update_time(struct tm *t) {
 	static char dateText[] = "XXX XXX 00"; 
@@ -155,9 +140,15 @@ void set_style(void) {
 
 	window_set_background_color(window, GColorBlack);
     text_layer_set_text_color(layer_time_text, GColorWhite);
-    text_layer_set_text_color(layer_wday_text, GColorWhite);
-    text_layer_set_text_color(layer_date_text, GColorWhite);
+#ifdef PBL_BW
     text_layer_set_text_color(layer_batt_text, GColorWhite);
+    text_layer_set_text_color(layer_date_text, GColorWhite);
+    text_layer_set_text_color(layer_word_text, GColorWhite);
+#else
+    text_layer_set_text_color(layer_batt_text, GColorBrightGreen);
+    text_layer_set_text_color(layer_date_text, GColorYellow);
+    text_layer_set_text_color(layer_word_text, GColorShockingPink);
+#endif
 }
 
 void force_update(void) {
@@ -203,31 +194,33 @@ void handle_init(void) {
     img_battery_low    = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BATTERY_LOW);
     img_battery_charge = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BATTERY_CHARGE);
 
-    // layers
-    layer_date_text = text_layer_create(GRect(8, 43, 144-8, 30));
-    layer_time_text = text_layer_create(GRect(7, 69, 144-7, 50));
-    layer_line      = layer_create(GRect(8, 72, 128, 2));
+#ifdef PBL_ROUND
+#define XOFF 18
+#define YOFF 8
+#else
+#define XOFF 0
+#define YOFF 0
+#endif
 
-	layer_wday_text = text_layer_create(GRect(8, 47, 144-8, 168-68));
-	layer_batt_text = text_layer_create(GRect(3,20,30,20));
-    layer_batt_img  = bitmap_layer_create(GRect(10, 10, 16, 16));
-    layer_conn_img  = bitmap_layer_create(GRect(118, 12, 20, 20));
-
-	layer_word_text = text_layer_create(GRect(7, 130, 144-7, 30));
+	// layers
+    layer_batt_img  = bitmap_layer_create(GRect(18+XOFF, 10+YOFF, 16, 16));
+	layer_batt_text = text_layer_create(GRect(10+XOFF,20+YOFF,30,20));
+    layer_conn_img  = bitmap_layer_create(GRect(120, 10+YOFF, 20, 20));
+	layer_date_text = text_layer_create(GRect(6+XOFF, 48, 144-8, 30));
+    layer_time_text = text_layer_create(GRect(10+XOFF, 74, 144-7, 50));
+	layer_word_text = text_layer_create(GRect(4+XOFF, 132-YOFF, 144-7, 30));
+	
     text_layer_set_text_color(layer_word_text, GColorWhite);
 	text_layer_set_background_color(layer_word_text, GColorClear);
     text_layer_set_font(layer_word_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_22)));
     text_layer_set_text_alignment(layer_word_text, GTextAlignmentCenter);
-
-    text_layer_set_background_color(layer_wday_text, GColorClear);
-    text_layer_set_font(layer_wday_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_22)));
 
     text_layer_set_background_color(layer_date_text, GColorClear);
     text_layer_set_font(layer_date_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_CONDENSED_22)));
 	text_layer_set_text_alignment(layer_date_text, GTextAlignmentCenter);
 	
     text_layer_set_background_color(layer_time_text, GColorClear);
-    text_layer_set_font(layer_time_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_BOLD_SUBSET_48)));
+    text_layer_set_font(layer_time_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_BOLD_SUBSET_44)));
     text_layer_set_text_alignment(layer_time_text, GTextAlignmentCenter);
 	
     text_layer_set_background_color(layer_batt_text, GColorClear);
@@ -237,19 +230,13 @@ void handle_init(void) {
     bitmap_layer_set_bitmap(layer_batt_img, img_battery_full);
     bitmap_layer_set_bitmap(layer_conn_img, img_bt_connect);
 
-    layer_set_update_proc(layer_line, line_layer_update_callback);
-
     // composing layers
     Layer *window_layer = window_get_root_layer(window);
-
-    layer_add_child(window_layer, layer_line);
     layer_add_child(window_layer, bitmap_layer_get_layer(layer_batt_img));
     layer_add_child(window_layer, bitmap_layer_get_layer(layer_conn_img));
-    layer_add_child(window_layer, text_layer_get_layer(layer_wday_text));
     layer_add_child(window_layer, text_layer_get_layer(layer_date_text));
     layer_add_child(window_layer, text_layer_get_layer(layer_time_text));
     layer_add_child(window_layer, text_layer_get_layer(layer_batt_text));
-	
     layer_add_child(window_layer, text_layer_get_layer(layer_word_text));
 	srand(time(NULL));
 

@@ -10,46 +10,53 @@
     "resources": {
         "media": [
             {
-                "file": "images/menu_icon.png",
-                "name": "IMAGE_MENU_ICON",
-                "type": "png"
-            },
-            {
                 "file": "images/disconnect.png",
                 "name": "IMAGE_DISCONNECT",
-                "type": "png"
+                "targetPlatforms": null,
+                "type": "bitmap"
             },
             {
                 "file": "images/bluetooth.png",
                 "name": "IMAGE_CONNECT",
-                "type": "png"
-            },
-            {
-                "file": "images/battery.png",
-                "name": "IMAGE_BATTERY_FULL",
-                "type": "png"
-            },
-            {
-                "file": "images/battery-half.png",
-                "name": "IMAGE_BATTERY_HALF",
-                "type": "png"
+                "targetPlatforms": null,
+                "type": "bitmap"
             },
             {
                 "file": "images/battery-low.png",
                 "name": "IMAGE_BATTERY_LOW",
-                "type": "png"
+                "targetPlatforms": null,
+                "type": "bitmap"
+            },
+            {
+                "file": "images/battery-half.png",
+                "name": "IMAGE_BATTERY_HALF",
+                "targetPlatforms": null,
+                "type": "bitmap"
             },
             {
                 "file": "images/battery-charge.png",
                 "name": "IMAGE_BATTERY_CHARGE",
-                "type": "png"
+                "targetPlatforms": null,
+                "type": "bitmap"
+            },
+            {
+                "file": "images/battery.png",
+                "name": "IMAGE_BATTERY_FULL",
+                "targetPlatforms": null,
+                "type": "bitmap"
             },
             {
                 "characterRegex": "[:0-9]",
                 "compatibility": "2.7",
                 "file": "fonts/Roboto-Bold.ttf",
-                "name": "FONT_ROBOTO_BOLD_SUBSET_48",
+                "name": "FONT_ROBOTO_BOLD_SUBSET_44",
+                "targetPlatforms": null,
                 "type": "font"
+            },
+            {
+                "file": "images/menu_icon.png",
+                "name": "IMAGE_MENU_ICON",
+                "type": "png"
             },
             {
                 "compatibility": "2.7",
@@ -67,7 +74,7 @@
         "chalk"
     ],
     "uuid": "b95eda21-5326-4fb0-ba9f-d2b1d259f6aa",
-    "versionLabel": "1.1",
+    "versionLabel": "1.2",
     "watchapp": {
         "watchface": true
     }
