@@ -203,11 +203,11 @@ void handle_init(void) {
 #endif
 
 	// layers
-    layer_batt_img  = bitmap_layer_create(GRect(18+XOFF, 10+YOFF, 16, 16));
-	layer_batt_text = text_layer_create(GRect(10+XOFF,20+YOFF,30,20));
-    layer_conn_img  = bitmap_layer_create(GRect(120, 10+YOFF, 20, 20));
-	layer_date_text = text_layer_create(GRect(6+XOFF, 48, 144-8, 30));
-    layer_time_text = text_layer_create(GRect(10+XOFF, 74, 144-7, 50));
+    layer_batt_img  = bitmap_layer_create(GRect(22+XOFF, 10+YOFF, 16, 16));
+	layer_batt_text = text_layer_create(GRect(14+XOFF,20+YOFF,30,20));
+    layer_conn_img  = bitmap_layer_create(GRect(116, 10+YOFF, 20, 20));
+	layer_date_text = text_layer_create(GRect(6+XOFF, 46, 144-8, 30));
+    layer_time_text = text_layer_create(GRect(4+XOFF, 72, 144, 52));
 	layer_word_text = text_layer_create(GRect(4+XOFF, 132-YOFF, 144-7, 30));
 	
     text_layer_set_text_color(layer_word_text, GColorWhite);
@@ -220,7 +220,7 @@ void handle_init(void) {
 	text_layer_set_text_alignment(layer_date_text, GTextAlignmentCenter);
 	
     text_layer_set_background_color(layer_time_text, GColorClear);
-    text_layer_set_font(layer_time_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_BOLD_SUBSET_44)));
+    text_layer_set_font(layer_time_text, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_BOLD_SUBSET_48)));
     text_layer_set_text_alignment(layer_time_text, GTextAlignmentCenter);
 	
     text_layer_set_background_color(layer_batt_text, GColorClear);
